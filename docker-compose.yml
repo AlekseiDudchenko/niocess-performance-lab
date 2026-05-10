@@ -1,0 +1,20 @@
+services:
+  client-app:
+    build: ./apps/client-app
+    container_name: niocess-client-app
+    environment:
+      SERVER_PORT: 8080
+      EXTERNAL_API_BASE_URL: http://external-api-simulator:8090
+    ports:
+      - "8080:8080"
+    depends_on:
+      - external-api-simulator
+
+  external-api-simulator:
+    build: ./apps/external-api-simulator
+    container_name: niocess-external-api-simulator
+    environment:
+      PORT: 8090
+      EXTERNAL_API_DELAY_MS: 500
+    ports:
+      - "8090:8090"

@@ -1,0 +1,21 @@
+{
+  "name": "niocess-external-api-simulator",
+  "version": "0.1.0",
+  "description": "External API simulator for Niocess benchmark scenarios.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "niocess",
+    "benchmark",
+    "external-api",
+    "simulator"
+  ],
+  "license": "MIT"
+}
