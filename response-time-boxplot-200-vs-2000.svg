@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="620" viewBox="0 0 940 620">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="470.0" y="38" text-anchor="middle" font-family="Arial" font-size="24" font-weight="700" fill="#222">Response Time Box Plot: 200 vs 2000 Threads</text>
+<text x="26" y="310.0" transform="rotate(-90 26 310.0)" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">Elapsed time, ms</text>
+<line x1="105" y1="515.0" x2="890" y2="515.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="520.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">903</text>
+<line x1="105" y1="427.0" x2="890" y2="427.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="432.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">1731</text>
+<line x1="105" y1="339.0" x2="890" y2="339.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="344.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">2559</text>
+<line x1="105" y1="251.0" x2="890" y2="251.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="256.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">3387</text>
+<line x1="105" y1="163.0" x2="890" y2="163.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="168.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">4215</text>
+<line x1="105" y1="75.0" x2="890" y2="75.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="93" y="80.0" text-anchor="end" font-family="Arial" font-size="13" fill="#555">5043</text>
+<line x1="105" y1="75" x2="105" y2="515" stroke="#333"/>
+<line x1="105" y1="515" x2="890" y2="515" stroke="#333"/>
+<line x1="301.2" y1="503.4" x2="301.2" y2="503.8" stroke="#1f77b4" stroke-width="3"/>
+<line x1="301.2" y1="504.2" x2="301.2" y2="504.4" stroke="#1f77b4" stroke-width="3"/>
+<line x1="254.6" y1="503.4" x2="347.9" y2="503.4" stroke="#1f77b4" stroke-width="3"/>
+<line x1="254.6" y1="504.4" x2="347.9" y2="504.4" stroke="#1f77b4" stroke-width="3"/>
+<rect x="231.2" y="503.8" width="140" height="2.0" fill="#1f77b4" fill-opacity="0.18" stroke="#1f77b4" stroke-width="3"/>
+<line x1="231.2" y1="504.1" x2="371.2" y2="504.1" stroke="#1f77b4" stroke-width="4"/>
+<circle cx="281.2" cy="503.3" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="285.2" cy="503.3" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="289.2" cy="503.3" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="293.2" cy="503.3" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="297.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="301.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="305.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="309.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="313.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="317.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="321.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="281.2" cy="503.2" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="285.2" cy="503.1" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="289.2" cy="503.1" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="293.2" cy="503.1" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="297.2" cy="503.1" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="301.2" cy="503.1" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="305.2" cy="503.0" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="309.2" cy="503.0" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="313.2" cy="502.8" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="317.2" cy="502.8" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="321.2" cy="502.6" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="281.2" cy="501.9" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="285.2" cy="501.6" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="289.2" cy="501.6" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="293.2" cy="501.5" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="297.2" cy="501.3" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="301.2" cy="499.8" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="305.2" cy="497.4" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="309.2" cy="495.6" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="313.2" cy="492.9" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="317.2" cy="491.5" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<circle cx="321.2" cy="491.5" r="3" fill="#1f77b4" fill-opacity="0.45"/>
+<text x="301.2" y="549" text-anchor="middle" font-family="Arial" font-size="15" fill="#333">200 threads</text>
+<text x="301.2" y="571" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">n=800, outliers=33</text>
+<text x="301.2" y="61" text-anchor="middle" font-family="Arial" font-size="13" fill="#1f77b4">median 1006 | q1 1005 | q3 1008</text>
+<line x1="693.8" y1="101.6" x2="693.8" y2="198.2" stroke="#d62728" stroke-width="3"/>
+<line x1="693.8" y1="392.2" x2="693.8" y2="504.4" stroke="#d62728" stroke-width="3"/>
+<line x1="647.1" y1="101.6" x2="740.4" y2="101.6" stroke="#d62728" stroke-width="3"/>
+<line x1="647.1" y1="504.4" x2="740.4" y2="504.4" stroke="#d62728" stroke-width="3"/>
+<rect x="623.8" y="198.2" width="140" height="194.0" fill="#d62728" fill-opacity="0.18" stroke="#d62728" stroke-width="3"/>
+<line x1="623.8" y1="288.0" x2="763.8" y2="288.0" stroke="#d62728" stroke-width="4"/>
+<text x="693.8" y="549" text-anchor="middle" font-family="Arial" font-size="15" fill="#333">2000 threads</text>
+<text x="693.8" y="571" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">n=8000, outliers=0</text>
+<text x="693.8" y="61" text-anchor="middle" font-family="Arial" font-size="13" fill="#d62728">median 3038 | q1 2059 | q3 3884</text>
+</svg>
