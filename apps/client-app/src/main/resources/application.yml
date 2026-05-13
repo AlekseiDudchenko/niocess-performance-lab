@@ -4,6 +4,16 @@ server:
 external-api:
   base-url: ${EXTERNAL_API_BASE_URL:http://localhost:8090}
 
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/perflab}
+    username: ${DB_USER:perflab}
+    password: ${DB_PASSWORD:perflab}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
 management:
   endpoints:
     web:

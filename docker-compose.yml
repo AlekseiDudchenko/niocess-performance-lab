@@ -5,10 +5,14 @@ services:
     environment:
       SERVER_PORT: 8080
       EXTERNAL_API_BASE_URL: http://external-api-simulator:8090
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-perflab}
+      DB_USER: ${POSTGRES_USER:-perflab}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-perflab}
     ports:
       - "8080:8080"
     depends_on:
       - external-api-simulator
+      - postgres
 
   external-api-simulator:
     build: ./apps/external-api-simulator
@@ -18,3 +22,19 @@ services:
       EXTERNAL_API_DELAY_MS: 500
     ports:
       - "8090:8090"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: niocess-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-perflab}
+      POSTGRES_USER: ${POSTGRES_USER:-perflab}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-perflab}
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:
