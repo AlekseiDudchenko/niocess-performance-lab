@@ -13,7 +13,7 @@ public class DbDriverConverter implements Converter<String, DbDriver> {
         try {
             return DbDriver.valueOf(source.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(source);
+            throw new IllegalArgumentException(source, e);
         }
     }
 }

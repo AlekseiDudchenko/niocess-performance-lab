@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/api/db")
 public class DbBenchmarkController {
@@ -16,32 +18,46 @@ public class DbBenchmarkController {
 
     private final ProductRepository productRepository;
     private final RiskProfileRepository riskProfileRepository;
+    private final PgAsyncProductRepository pgAsyncProductRepository;
+    private final PgAsyncRiskProfileRepository pgAsyncRiskProfileRepository;
 
     public DbBenchmarkController(ProductRepository productRepository,
-                                  RiskProfileRepository riskProfileRepository) {
+                                  RiskProfileRepository riskProfileRepository,
+                                  PgAsyncProductRepository pgAsyncProductRepository,
+                                  PgAsyncRiskProfileRepository pgAsyncRiskProfileRepository) {
         this.productRepository = productRepository;
         this.riskProfileRepository = riskProfileRepository;
+        this.pgAsyncProductRepository = pgAsyncProductRepository;
+        this.pgAsyncRiskProfileRepository = pgAsyncRiskProfileRepository;
     }
 
     @GetMapping("/pricing")
-    public ResponseEntity<Product> pricing(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.info("db/pricing driver={}", driver);
+    public CompletableFuture<ResponseEntity<Product>> pricing(
+            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
+        log.debug("db/pricing driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
-            throw new UnsupportedOperationException("pgasync driver not yet implemented");
+            return pgAsyncProductRepository.findRandom()
+                    .thenApply(opt -> opt.<ResponseEntity<Product>>map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build()));
         }
-        return productRepository.findRandom()
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return CompletableFuture.completedFuture(
+                productRepository.findRandom()
+                        .<ResponseEntity<Product>>map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build()));
     }
 
     @GetMapping("/risk-score")
-    public ResponseEntity<RiskProfile> riskScore(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.info("db/risk-score driver={}", driver);
+    public CompletableFuture<ResponseEntity<RiskProfile>> riskScore(
+            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
+        log.debug("db/risk-score driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
-            throw new UnsupportedOperationException("pgasync driver not yet implemented");
+            return pgAsyncRiskProfileRepository.findRandom()
+                    .thenApply(opt -> opt.<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build()));
         }
-        return riskProfileRepository.findRandom()
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return CompletableFuture.completedFuture(
+                riskProfileRepository.findRandom()
+                        .<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build()));
     }
 }

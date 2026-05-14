@@ -16,6 +16,17 @@ public class Product {
     private BigDecimal price;
     private String currency;
 
+    protected Product() {
+    }
+
+    Product(Long id, String sku, String name, BigDecimal price, String currency) {
+        this.id = id;
+        this.sku = sku;
+        this.name = name;
+        this.price = price;
+        this.currency = currency;
+    }
+
     public Long getId() { return id; }
     public String getSku() { return sku; }
     public String getName() { return name; }
