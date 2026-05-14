@@ -140,6 +140,11 @@ function formatNumber(value) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(value);
 }
 
+function formatMetric(value, unit) {
+  if (value === null || value === undefined) return '—';
+  return `${formatNumber(value)} ${unit}`;
+}
+
 function appendCell(row, text) {
   const cell = document.createElement('td');
   cell.textContent = text;
@@ -155,11 +160,11 @@ function fillTable(data) {
       const row = document.createElement('tr');
       appendCell(row, String(point.concurrentUsers));
       appendCell(row, variant.label);
-      appendCell(row, `${formatNumber(variant.throughput)} req/s`);
-      appendCell(row, `${formatNumber(variant.avgLatency)} ms`);
-      appendCell(row, `${formatNumber(variant.p95)} ms`);
-      appendCell(row, `${formatNumber(variant.p99)} ms`);
-      appendCell(row, `${formatNumber(variant.max)} ms`);
+      appendCell(row, formatMetric(variant.throughput, 'req/s'));
+      appendCell(row, formatMetric(variant.avgLatency, 'ms'));
+      appendCell(row, formatMetric(variant.p95, 'ms'));
+      appendCell(row, formatMetric(variant.p99, 'ms'));
+      appendCell(row, formatMetric(variant.max, 'ms'));
       tbody.appendChild(row);
     });
   });
@@ -194,6 +199,21 @@ function setupSeriesToggles() {
   });
 }
 
+function showDashboardError(error) {
+  const dashboard = document.getElementById('dashboard');
+  const section = document.createElement('section');
+  section.className = 'panel wide';
+
+  const heading = document.createElement('h2');
+  heading.textContent = 'Could not load dashboard';
+
+  const message = document.createElement('p');
+  message.textContent = error.message;
+
+  section.append(heading, message);
+  dashboard.replaceChildren(section);
+}
+
 async function init() {
   try {
     if (!window.Chart) {
@@ -210,12 +230,7 @@ async function init() {
     setupSeriesToggles();
   } catch (error) {
     console.error(error);
-    document.getElementById('dashboard').innerHTML = `
-      <section class="panel wide">
-        <h2>Could not load dashboard</h2>
-        <p>${error.message}</p>
-      </section>
-    `;
+    showDashboardError(error);
   }
 }
 
