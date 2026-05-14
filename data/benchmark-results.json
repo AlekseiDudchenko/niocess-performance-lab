@@ -1,0 +1,53 @@
+{
+  "scenario": "JDBC vs pgasync",
+  "description": "Blocking JDBC database access compared with non-blocking PostgreSQL access through pgasync.",
+  "source": "README.md documented benchmark runs",
+  "unit": {
+    "throughput": "requests/sec",
+    "latency": "ms"
+  },
+  "results": [
+    {
+      "concurrentUsers": 100,
+      "variants": {
+        "jdbc": {
+          "label": "JDBC baseline",
+          "throughput": 7563,
+          "avgLatency": 11.0,
+          "p95": 29,
+          "p99": 46,
+          "max": null
+        },
+        "pgasync": {
+          "label": "pgasync non-blocking",
+          "throughput": 7977,
+          "avgLatency": 10.4,
+          "p95": 18,
+          "p99": 26,
+          "max": null
+        }
+      }
+    },
+    {
+      "concurrentUsers": 300,
+      "variants": {
+        "jdbc": {
+          "label": "JDBC baseline",
+          "throughput": 7594,
+          "avgLatency": 29.7,
+          "p95": 100,
+          "p99": 159,
+          "max": 488
+        },
+        "pgasync": {
+          "label": "pgasync non-blocking",
+          "throughput": 9312,
+          "avgLatency": 24.2,
+          "p95": 42,
+          "p99": 59,
+          "max": 158
+        }
+      }
+    }
+  ]
+}
