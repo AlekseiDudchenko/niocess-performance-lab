@@ -2,6 +2,28 @@
 
 Benchmark lab for demonstrating how Niocess can reduce duplicate backend calls, protect slow downstream services, and improve latency under repeated expensive requests.
 
+## Plan
+
+### Phase 1 — Baseline (done)
+- [x] `client-app` — Spring Boot REST API with configurable `delayMs` per request
+- [x] `external-api-simulator` — slow/paid third-party API simulator
+- [x] PostgreSQL support — DB benchmark mode with seeded data (500 products, 500 risk profiles)
+- [x] Docker Compose stack — single `docker compose up --build` starts all three services
+- [x] JMeter baseline experiment — matrix of 6 thread levels × 6 delay levels × 3 repeats
+- [x] Experiment tooling — `run-baseline-experiment.ps1` runner + `analyze-baseline-experiment.py` analyzer
+- [x] Baseline results saved — response time summaries and boxplot for 200 vs 2000 threads
+
+### Phase 2 — Niocess Integration (next)
+- [ ] Add Niocess Layer to Docker Compose between `client-app` and `external-api-simulator`
+- [ ] Configure deduplication / caching rules in Niocess for pricing, risk-score, analytics endpoints
+- [ ] Run the same JMeter matrix with Niocess in the path
+- [ ] Compare results: latency, error rate, upstream call reduction
+
+### Phase 3 — Analysis & Demo
+- [ ] Side-by-side comparison charts (before vs after Niocess)
+- [ ] Document observed improvements per scenario (high concurrency, slow downstream, repeated identical requests)
+- [ ] Prepare demo script / slide deck
+
 ## Structure
 
 ```text
