@@ -2,7 +2,6 @@ package com.niocess.perflab.client.db;
 
 import com.github.pgasync.netty.NettyConnectibleBuilder;
 import com.pgasync.Connectible;
-import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,24 +15,14 @@ public class PgAsyncConfig {
     @Value("${pgasync.username:perflab}") private String username;
     @Value("${pgasync.password:perflab}") private String password;
 
-    private Connectible pool;
-
-    @Bean
+    @Bean(destroyMethod = "close")
     public Connectible pgAsyncPool() {
-        pool = new NettyConnectibleBuilder()
+        return new NettyConnectibleBuilder()
                 .hostname(host)
                 .port(port)
                 .database(database)
                 .username(username)
                 .password(password)
                 .pool();
-        return pool;
-    }
-
-    @PreDestroy
-    public void closePool() {
-        if (pool != null) {
-            pool.close().join();
-        }
     }
 }
