@@ -14,13 +14,18 @@ public class RiskProfile {
     private int score;
     private String category;
 
+    protected RiskProfile() {
+    }
+
+    RiskProfile(Long id, String clientId, int score, String category) {
+        this.id = id;
+        this.clientId = clientId;
+        this.score = score;
+        this.category = category;
+    }
+
     public Long getId() { return id; }
     public String getClientId() { return clientId; }
     public int getScore() { return score; }
     public String getCategory() { return category; }
-
-    void setId(Long id) { this.id = id; }
-    void setClientId(String clientId) { this.clientId = clientId; }
-    void setScore(int score) { this.score = score; }
-    void setCategory(String category) { this.category = category; }
 }

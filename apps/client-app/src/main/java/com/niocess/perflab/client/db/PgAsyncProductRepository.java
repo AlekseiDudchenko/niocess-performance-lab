@@ -23,13 +23,13 @@ public class PgAsyncProductRepository {
             var it = rs.iterator();
             if (!it.hasNext()) return Optional.<Product>empty();
             Row row = it.next();
-            Product p = new Product();
-            p.setId(row.getLong("id"));
-            p.setSku(row.getString("sku"));
-            p.setName(row.getString("name"));
-            p.setPrice(row.getBigDecimal("price"));
-            p.setCurrency(row.getString("currency"));
-            return Optional.of(p);
+            return Optional.of(new Product(
+                    row.getLong("id"),
+                    row.getString("sku"),
+                    row.getString("name"),
+                    row.getBigDecimal("price"),
+                    row.getString("currency")
+            ));
         });
     }
 }

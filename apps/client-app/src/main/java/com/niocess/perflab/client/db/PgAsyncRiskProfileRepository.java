@@ -23,12 +23,12 @@ public class PgAsyncRiskProfileRepository {
             var it = rs.iterator();
             if (!it.hasNext()) return Optional.<RiskProfile>empty();
             Row row = it.next();
-            RiskProfile rp = new RiskProfile();
-            rp.setId(row.getLong("id"));
-            rp.setClientId(row.getString("client_id"));
-            rp.setScore(row.getInt("score"));
-            rp.setCategory(row.getString("category"));
-            return Optional.of(rp);
+            return Optional.of(new RiskProfile(
+                    row.getLong("id"),
+                    row.getString("client_id"),
+                    row.getInt("score"),
+                    row.getString("category")
+            ));
         });
     }
 }

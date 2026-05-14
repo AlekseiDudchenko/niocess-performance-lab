@@ -16,15 +16,20 @@ public class Product {
     private BigDecimal price;
     private String currency;
 
+    protected Product() {
+    }
+
+    Product(Long id, String sku, String name, BigDecimal price, String currency) {
+        this.id = id;
+        this.sku = sku;
+        this.name = name;
+        this.price = price;
+        this.currency = currency;
+    }
+
     public Long getId() { return id; }
     public String getSku() { return sku; }
     public String getName() { return name; }
     public BigDecimal getPrice() { return price; }
     public String getCurrency() { return currency; }
-
-    void setId(Long id) { this.id = id; }
-    void setSku(String sku) { this.sku = sku; }
-    void setName(String name) { this.name = name; }
-    void setPrice(BigDecimal price) { this.price = price; }
-    void setCurrency(String currency) { this.currency = currency; }
 }
