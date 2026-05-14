@@ -5,7 +5,7 @@ COPY gradlew .
 COPY gradle ./gradle
 COPY build.gradle.kts settings.gradle.kts ./
 COPY src ./src
-RUN ./gradlew -q -x test bootJar
+RUN --mount=type=cache,target=/root/.gradle ./gradlew -q -x test bootJar
 
 FROM eclipse-temurin:21-jre
 
