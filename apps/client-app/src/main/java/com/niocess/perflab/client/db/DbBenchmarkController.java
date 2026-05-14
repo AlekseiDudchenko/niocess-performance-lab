@@ -34,7 +34,7 @@ public class DbBenchmarkController {
     @GetMapping("/pricing")
     public CompletableFuture<ResponseEntity<Product>> pricing(
             @RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.info("db/pricing driver={}", driver);
+        log.debug("db/pricing driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
             return pgAsyncProductRepository.findRandom()
                     .thenApply(opt -> opt.<ResponseEntity<Product>>map(ResponseEntity::ok)
@@ -49,7 +49,7 @@ public class DbBenchmarkController {
     @GetMapping("/risk-score")
     public CompletableFuture<ResponseEntity<RiskProfile>> riskScore(
             @RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.info("db/risk-score driver={}", driver);
+        log.debug("db/risk-score driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
             return pgAsyncRiskProfileRepository.findRandom()
                     .thenApply(opt -> opt.<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
