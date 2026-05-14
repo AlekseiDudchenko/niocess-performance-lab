@@ -13,8 +13,10 @@ Benchmark lab for measuring latency and throughput across different backend scen
 - [x] Experiment tooling — `run-baseline-experiment.ps1` runner + `analyze-baseline-experiment.py` analyzer
 - [x] Baseline results saved — response time summaries and boxplot for 200 vs 2000 threads
 
-### Phase 2 — pgasync (next)
-- [ ] TBD — see [postgres-async-driver](https://github.com/AlekseiDudchenko/postgres-async-driver)
+### Phase 2 — pgasync (done)
+- [x] Non-blocking PostgreSQL driver wired up via [postgres-async-driver](https://github.com/AlekseiDudchenko/postgres-async-driver) fork
+- [x] `?driver=pgasync` path on all `/api/db/*` endpoints — Tomcat thread released during I/O (Netty handles the query asynchronously)
+- [x] `?driver=jdbc` path unchanged — blocking Spring Data JPA / Hibernate
 
 ### Phase 3 — Analysis & Demo
 - [ ] Side-by-side comparison charts (before vs after)
@@ -75,10 +77,38 @@ PostgreSQL starts automatically with the rest of the stack. The schema and seed 
 
 ### DB Endpoints
 
+Both endpoints accept an optional `?driver=` parameter to switch between drivers:
+
+| `driver` | Description |
+|----------|-------------|
+| `jdbc` (default) | Blocking — Spring Data JPA / Hibernate, Tomcat thread held for the duration |
+| `pgasync` | Non-blocking — [postgres-async-driver](https://github.com/AlekseiDudchenko/postgres-async-driver), Tomcat thread released while Netty handles I/O |
+
 ```bash
-curl http://localhost:8080/api/db/pricing      # random product from PostgreSQL
-curl http://localhost:8080/api/db/risk-score   # random risk profile from PostgreSQL
+# JDBC (default)
+curl "http://localhost:8080/api/db/pricing"
+curl "http://localhost:8080/api/db/risk-score"
+
+# Explicit JDBC
+curl "http://localhost:8080/api/db/pricing?driver=jdbc"
+curl "http://localhost:8080/api/db/risk-score?driver=jdbc"
+
+# pgasync — non-blocking
+curl "http://localhost:8080/api/db/pricing?driver=pgasync"
+curl "http://localhost:8080/api/db/risk-score?driver=pgasync"
 ```
+
+**Response shape** (same for both drivers):
+
+```json
+// GET /api/db/pricing
+{ "id": 42, "sku": "SKU-042", "name": "Widget", "price": 9.99, "currency": "USD" }
+
+// GET /api/db/risk-score
+{ "id": 7, "clientId": "client-007", "score": 82, "category": "HIGH" }
+```
+
+Status codes: `200 OK`, `404 Not Found` (empty table), `400 Bad Request` (invalid driver value).
 
 ### Configuration
 
@@ -107,8 +137,14 @@ External-API mode:
 JMeter/k6 -> client-app -> external-api-simulator
 ```
 
-Database mode:
+Database mode — JDBC (blocking):
 
 ```text
-JMeter/k6 -> client-app -> PostgreSQL
+JMeter/k6 -> client-app (Tomcat thread held) -> PostgreSQL
+```
+
+Database mode — pgasync (non-blocking):
+
+```text
+JMeter/k6 -> client-app (Tomcat thread released) -> Netty -> PostgreSQL
 ```
