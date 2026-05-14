@@ -5,6 +5,7 @@ import com.pgasync.Row;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class PgAsyncRiskProfileRepository {
@@ -15,7 +16,7 @@ public class PgAsyncRiskProfileRepository {
         this.pool = pool;
     }
 
-    public Optional<RiskProfile> findRandom() {
+    public CompletableFuture<Optional<RiskProfile>> findRandom() {
         return pool.completeQuery(
                 "SELECT id, client_id, score, category FROM risk_profiles ORDER BY random() LIMIT 1"
         ).thenApply(rs -> {
@@ -28,6 +29,6 @@ public class PgAsyncRiskProfileRepository {
             rp.setScore(row.getInt("score"));
             rp.setCategory(row.getString("category"));
             return Optional.of(rp);
-        }).join();
+        });
     }
 }

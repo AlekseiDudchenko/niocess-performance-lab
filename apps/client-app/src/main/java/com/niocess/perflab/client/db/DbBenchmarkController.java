@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/api/db")
 public class DbBenchmarkController {
@@ -30,28 +32,32 @@ public class DbBenchmarkController {
     }
 
     @GetMapping("/pricing")
-    public ResponseEntity<Product> pricing(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
+    public CompletableFuture<ResponseEntity<Product>> pricing(
+            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
         log.info("db/pricing driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
             return pgAsyncProductRepository.findRandom()
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+                    .thenApply(opt -> opt.<ResponseEntity<Product>>map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build()));
         }
-        return productRepository.findRandom()
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return CompletableFuture.completedFuture(
+                productRepository.findRandom()
+                        .<ResponseEntity<Product>>map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build()));
     }
 
     @GetMapping("/risk-score")
-    public ResponseEntity<RiskProfile> riskScore(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
+    public CompletableFuture<ResponseEntity<RiskProfile>> riskScore(
+            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
         log.info("db/risk-score driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
             return pgAsyncRiskProfileRepository.findRandom()
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+                    .thenApply(opt -> opt.<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build()));
         }
-        return riskProfileRepository.findRandom()
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return CompletableFuture.completedFuture(
+                riskProfileRepository.findRandom()
+                        .<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build()));
     }
 }

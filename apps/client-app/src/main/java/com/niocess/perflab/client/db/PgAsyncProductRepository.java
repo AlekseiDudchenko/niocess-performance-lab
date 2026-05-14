@@ -5,6 +5,7 @@ import com.pgasync.Row;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class PgAsyncProductRepository {
@@ -15,7 +16,7 @@ public class PgAsyncProductRepository {
         this.pool = pool;
     }
 
-    public Optional<Product> findRandom() {
+    public CompletableFuture<Optional<Product>> findRandom() {
         return pool.completeQuery(
                 "SELECT id, sku, name, price, currency FROM products ORDER BY random() LIMIT 1"
         ).thenApply(rs -> {
@@ -29,6 +30,6 @@ public class PgAsyncProductRepository {
             p.setPrice(row.getBigDecimal("price"));
             p.setCurrency(row.getString("currency"));
             return Optional.of(p);
-        }).join();
+        });
     }
 }
