@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Niocess Performance Lab</title>
+  <meta name="description" content="Interactive benchmark dashboard for Niocess Performance Lab." />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="./">Niocess Performance Lab</a>
+      <a class="nav-link" href="https://niocess.com">niocess.com</a>
+    </nav>
+
+    <section class="hero-content">
+      <p class="eyebrow">Benchmark dashboard</p>
+      <h1>Compare latency, throughput, and backend pressure under load.</h1>
+      <p class="lead">
+        This page visualizes controlled benchmark scenarios from the Niocess performance lab.
+        Start with the JDBC baseline vs pgasync non-blocking driver comparison.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#dashboard">Open dashboard</a>
+        <a class="button secondary" href="https://github.com/AlekseiDudchenko/niocess-performance-lab">View repository</a>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="summary-grid" aria-label="Benchmark summary">
+      <article class="summary-card">
+        <span class="summary-label">Scenario</span>
+        <strong>JDBC vs pgasync</strong>
+        <p>Blocking database access compared with non-blocking PostgreSQL access.</p>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Best p95 result</span>
+        <strong id="bestP95">Loading…</strong>
+        <p>Tail latency reduction at the highest measured load point.</p>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Best throughput result</span>
+        <strong id="bestThroughput">Loading…</strong>
+        <p>Throughput improvement at the highest measured load point.</p>
+      </article>
+    </section>
+
+    <section id="dashboard" class="dashboard">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Interactive comparison</p>
+          <h2>Metrics by concurrent users</h2>
+        </div>
+        <p>
+          Click metric groups to show or hide charts. The data is loaded from
+          <code>data/benchmark-results.json</code> so benchmark runs can update the page later.
+        </p>
+      </div>
+
+      <div class="controls" aria-label="Dashboard controls">
+        <button class="metric-toggle active" data-target="latencyPanel" aria-pressed="true">Latency</button>
+        <button class="metric-toggle active" data-target="throughputPanel" aria-pressed="true">Throughput</button>
+        <button class="metric-toggle active" data-target="tailPanel" aria-pressed="true">Tail latency</button>
+        <button class="metric-toggle active" data-target="tablePanel" aria-pressed="true">Raw data</button>
+      </div>
+
+      <div class="charts-grid">
+        <article class="panel" id="latencyPanel">
+          <div class="panel-header">
+            <h3>Average latency</h3>
+            <p>Lower is better. Shows how request duration changes as concurrency grows.</p>
+          </div>
+          <canvas id="avgLatencyChart" aria-label="Average latency chart" role="img"></canvas>
+        </article>
+
+        <article class="panel" id="throughputPanel">
+          <div class="panel-header">
+            <h3>Throughput</h3>
+            <p>Higher is better. Shows completed requests per second.</p>
+          </div>
+          <canvas id="throughputChart" aria-label="Throughput chart" role="img"></canvas>
+        </article>
+
+        <article class="panel wide" id="tailPanel">
+          <div class="panel-header">
+            <h3>Tail latency</h3>
+            <p>p95 and p99 are often more important than average latency for real users. Max latency is available only for runs where it was recorded.</p>
+          </div>
+          <div class="inline-controls" aria-label="Tail latency series controls">
+            <label><input type="checkbox" data-series="p95" checked /> p95</label>
+            <label><input type="checkbox" data-series="p99" checked /> p99</label>
+            <label><input type="checkbox" data-series="max" /> max</label>
+          </div>
+          <canvas id="tailLatencyChart" aria-label="Tail latency chart" role="img"></canvas>
+        </article>
+
+        <article class="panel wide" id="tablePanel">
+          <div class="panel-header">
+            <h3>Raw benchmark data</h3>
+            <p>Numbers currently reflect the documented JDBC vs pgasync runs in this repository.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Concurrent users</th>
+                  <th>Scenario</th>
+                  <th>Throughput</th>
+                  <th>Avg latency</th>
+                  <th>p95</th>
+                  <th>p99</th>
+                  <th>Max</th>
+                </tr>
+              </thead>
+              <tbody id="dataTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Niocess Performance Lab · static dashboard served by GitHub Pages</p>
+  </footer>
+</body>
+</html>
