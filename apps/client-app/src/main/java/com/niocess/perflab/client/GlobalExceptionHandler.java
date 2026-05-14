@@ -15,11 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnsupportedOperationException.class)
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     Map<String, String> handleNotImplemented(UnsupportedOperationException ex) {
-        String message = ex.getMessage();
-        if (message == null) {
-            message = "Not implemented";
-        }
-        return Map.of("error", message);
+        return Map.of("error", ex== null? "" : ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -29,7 +25,6 @@ public class GlobalExceptionHandler {
             String valid = String.join(", ",
                     java.util.Arrays.stream(ex.getRequiredType().getEnumConstants())
                             .map(Object::toString)
-                            .map(s -> s.toLowerCase(Locale.ROOT))
                             .toArray(String[]::new));
             return Map.of("error", "invalid " + ex.getName() + ": '" + ex.getValue() + "'. Valid values: " + valid);
         }
