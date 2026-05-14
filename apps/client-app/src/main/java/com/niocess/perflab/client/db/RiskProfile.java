@@ -18,4 +18,9 @@ public class RiskProfile {
     public String getClientId() { return clientId; }
     public int getScore() { return score; }
     public String getCategory() { return category; }
+
+    void setId(Long id) { this.id = id; }
+    void setClientId(String clientId) { this.clientId = clientId; }
+    void setScore(int score) { this.score = score; }
+    void setCategory(String category) { this.category = category; }
 }

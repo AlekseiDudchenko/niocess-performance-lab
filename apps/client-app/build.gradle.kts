@@ -22,6 +22,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
+    implementation(files("libs/postgres-async-driver-1.0.5.jar"))
+    implementation("io.netty:netty-handler:4.2.12.Final")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

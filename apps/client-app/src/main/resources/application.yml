@@ -14,6 +14,13 @@ spring:
       ddl-auto: none
     open-in-view: false
 
+pgasync:
+  host: ${PGASYNC_HOST:localhost}
+  port: ${PGASYNC_PORT:5432}
+  database: ${PGASYNC_DATABASE:perflab}
+  username: ${PGASYNC_USER:perflab}
+  password: ${PGASYNC_PASSWORD:perflab}
+
 management:
   endpoints:
     web:

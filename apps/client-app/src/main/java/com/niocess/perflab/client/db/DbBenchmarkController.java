@@ -16,18 +16,26 @@ public class DbBenchmarkController {
 
     private final ProductRepository productRepository;
     private final RiskProfileRepository riskProfileRepository;
+    private final PgAsyncProductRepository pgAsyncProductRepository;
+    private final PgAsyncRiskProfileRepository pgAsyncRiskProfileRepository;
 
     public DbBenchmarkController(ProductRepository productRepository,
-                                  RiskProfileRepository riskProfileRepository) {
+                                  RiskProfileRepository riskProfileRepository,
+                                  PgAsyncProductRepository pgAsyncProductRepository,
+                                  PgAsyncRiskProfileRepository pgAsyncRiskProfileRepository) {
         this.productRepository = productRepository;
         this.riskProfileRepository = riskProfileRepository;
+        this.pgAsyncProductRepository = pgAsyncProductRepository;
+        this.pgAsyncRiskProfileRepository = pgAsyncRiskProfileRepository;
     }
 
     @GetMapping("/pricing")
     public ResponseEntity<Product> pricing(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
         log.info("db/pricing driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
-            throw new UnsupportedOperationException("pgasync driver not yet implemented");
+            return pgAsyncProductRepository.findRandom()
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
         }
         return productRepository.findRandom()
                 .map(ResponseEntity::ok)
@@ -38,7 +46,9 @@ public class DbBenchmarkController {
     public ResponseEntity<RiskProfile> riskScore(@RequestParam(defaultValue = "jdbc") DbDriver driver) {
         log.info("db/risk-score driver={}", driver);
         if (driver == DbDriver.PGASYNC) {
-            throw new UnsupportedOperationException("pgasync driver not yet implemented");
+            return pgAsyncRiskProfileRepository.findRandom()
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
         }
         return riskProfileRepository.findRandom()
                 .map(ResponseEntity::ok)

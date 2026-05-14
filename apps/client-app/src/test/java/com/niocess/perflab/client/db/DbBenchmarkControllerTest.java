@@ -30,6 +30,12 @@ class DbBenchmarkControllerTest {
     @MockitoBean
     private RiskProfileRepository riskProfileRepository;
 
+    @MockitoBean
+    private PgAsyncProductRepository pgAsyncProductRepository;
+
+    @MockitoBean
+    private PgAsyncRiskProfileRepository pgAsyncRiskProfileRepository;
+
     // --- /api/db/pricing ---
 
     @Test
@@ -59,10 +65,16 @@ class DbBenchmarkControllerTest {
     }
 
     @Test
-    void pricingPgasyncDriverReturns501() throws Exception {
+    void pricingPgasyncDriverReturns200() throws Exception {
+        Product product = mockProduct();
+        when(pgAsyncProductRepository.findRandom()).thenReturn(Optional.of(product));
+
         mockMvc.perform(get("/api/db/pricing?driver=pgasync"))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.error").value("pgasync driver not yet implemented"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sku").value("SKU-001"))
+                .andExpect(jsonPath("$.name").value("Widget"))
+                .andExpect(jsonPath("$.price").value(9.99))
+                .andExpect(jsonPath("$.currency").value("USD"));
     }
 
     @Test
@@ -134,10 +146,15 @@ class DbBenchmarkControllerTest {
     }
 
     @Test
-    void riskScorePgasyncDriverReturns501() throws Exception {
+    void riskScorePgasyncDriverReturns200() throws Exception {
+        RiskProfile profile = mockRiskProfile();
+        when(pgAsyncRiskProfileRepository.findRandom()).thenReturn(Optional.of(profile));
+
         mockMvc.perform(get("/api/db/risk-score?driver=pgasync"))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.error").value("pgasync driver not yet implemented"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.clientId").value("client-42"))
+                .andExpect(jsonPath("$.score").value(750))
+                .andExpect(jsonPath("$.category").value("LOW"));
     }
 
     @Test

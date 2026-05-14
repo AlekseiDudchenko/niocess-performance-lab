@@ -4,6 +4,7 @@ WORKDIR /app
 COPY gradlew .
 COPY gradle ./gradle
 COPY build.gradle.kts settings.gradle.kts ./
+COPY libs ./libs
 COPY src ./src
 RUN --mount=type=cache,target=/root/.gradle ./gradlew -q -x test bootJar
 
