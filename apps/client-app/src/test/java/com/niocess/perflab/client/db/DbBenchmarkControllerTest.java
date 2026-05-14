@@ -39,7 +39,10 @@ class DbBenchmarkControllerTest {
 
         mockMvc.perform(get("/api/db/pricing"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sku").value("SKU-001"));
+                .andExpect(jsonPath("$.sku").value("SKU-001"))
+                .andExpect(jsonPath("$.name").value("Widget"))
+                .andExpect(jsonPath("$.price").value(9.99))
+                .andExpect(jsonPath("$.currency").value("USD"));
     }
 
     @Test
@@ -49,7 +52,10 @@ class DbBenchmarkControllerTest {
 
         mockMvc.perform(get("/api/db/pricing?driver=jdbc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sku").value("SKU-001"));
+                .andExpect(jsonPath("$.sku").value("SKU-001"))
+                .andExpect(jsonPath("$.name").value("Widget"))
+                .andExpect(jsonPath("$.price").value(9.99))
+                .andExpect(jsonPath("$.currency").value("USD"));
     }
 
     @Test
@@ -83,7 +89,9 @@ class DbBenchmarkControllerTest {
 
         mockMvc.perform(get("/api/db/risk-score"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.clientId").value("client-42"));
+                .andExpect(jsonPath("$.clientId").value("client-42"))
+                .andExpect(jsonPath("$.score").value(750))
+                .andExpect(jsonPath("$.category").value("LOW"));
     }
 
     @Test
@@ -93,7 +101,9 @@ class DbBenchmarkControllerTest {
 
         mockMvc.perform(get("/api/db/risk-score?driver=jdbc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.clientId").value("client-42"));
+                .andExpect(jsonPath("$.clientId").value("client-42"))
+                .andExpect(jsonPath("$.score").value(750))
+                .andExpect(jsonPath("$.category").value("LOW"));
     }
 
     @Test
