@@ -1,4 +1,6 @@
 target/
+build/
+.gradle/
 node_modules/
 npm-debug.log*
 .env
