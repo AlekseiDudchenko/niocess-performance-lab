@@ -140,22 +140,26 @@ function formatNumber(value) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format(value);
 }
 
+function appendCell(row, text) {
+  const cell = document.createElement('td');
+  cell.textContent = text;
+  row.appendChild(cell);
+}
+
 function fillTable(data) {
   const tbody = document.getElementById('dataTableBody');
-  tbody.innerHTML = '';
+  tbody.replaceChildren();
 
   data.results.forEach((point) => {
     Object.values(point.variants).forEach((variant) => {
       const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${point.concurrentUsers}</td>
-        <td>${variant.label}</td>
-        <td>${formatNumber(variant.throughput)} req/s</td>
-        <td>${formatNumber(variant.avgLatency)} ms</td>
-        <td>${formatNumber(variant.p95)} ms</td>
-        <td>${formatNumber(variant.p99)} ms</td>
-        <td>${formatNumber(variant.max)} ms</td>
-      `;
+      appendCell(row, String(point.concurrentUsers));
+      appendCell(row, variant.label);
+      appendCell(row, `${formatNumber(variant.throughput)} req/s`);
+      appendCell(row, `${formatNumber(variant.avgLatency)} ms`);
+      appendCell(row, `${formatNumber(variant.p95)} ms`);
+      appendCell(row, `${formatNumber(variant.p99)} ms`);
+      appendCell(row, `${formatNumber(variant.max)} ms`);
       tbody.appendChild(row);
     });
   });
@@ -192,6 +196,10 @@ function setupSeriesToggles() {
 
 async function init() {
   try {
+    if (!window.Chart) {
+      throw new Error('Chart.js could not be loaded. Check your internet connection or CDN access.');
+    }
+
     benchmarkData = await loadData();
     createLineChart('avgLatencyChart', benchmarkData, 'avgLatency', 'Average latency, ms');
     createLineChart('throughputChart', benchmarkData, 'throughput', 'Requests per second');
