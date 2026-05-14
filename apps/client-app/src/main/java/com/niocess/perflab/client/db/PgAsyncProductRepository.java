@@ -16,9 +16,10 @@ public class PgAsyncProductRepository {
         this.pool = pool;
     }
 
-    public CompletableFuture<Optional<Product>> findRandom() {
+    public CompletableFuture<Optional<Product>> findRandom(double delaySec) {
         return pool.completeQuery(
-                "SELECT id, sku, name, price, currency FROM products ORDER BY random() LIMIT 1"
+                "SELECT pg_sleep($1), id, sku, name, price, currency FROM products WHERE id = (SELECT id FROM products ORDER BY random() LIMIT 1)",
+                delaySec
         ).thenApply(rs -> {
             var it = rs.iterator();
             if (!it.hasNext()) return Optional.<Product>empty();

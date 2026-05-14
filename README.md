@@ -81,12 +81,14 @@ This scenario measures how much that difference matters at the database layer wi
 
 ### Endpoints
 
-| Endpoint | Driver | Behavior |
-|----------|--------|----------|
-| `GET /api/db/pricing?driver=jdbc` | Spring Data JPA / Hibernate | Tomcat thread held |
-| `GET /api/db/pricing?driver=pgasync` | postgres-async-driver (Netty) | Tomcat thread released |
-| `GET /api/db/risk-score?driver=jdbc` | Spring Data JPA / Hibernate | Tomcat thread held |
-| `GET /api/db/risk-score?driver=pgasync` | postgres-async-driver (Netty) | Tomcat thread released |
+| Endpoint | Driver | `delayMs` | Behavior |
+|----------|--------|-----------|----------|
+| `GET /api/db/pricing?driver=jdbc` | Spring Data JPA / Hibernate | optional, default `0` | Tomcat thread held for query + sleep duration |
+| `GET /api/db/pricing?driver=pgasync` | postgres-async-driver (Netty) | optional, default `0` | Tomcat thread released immediately |
+| `GET /api/db/risk-score?driver=jdbc` | Spring Data JPA / Hibernate | optional, default `0` | Tomcat thread held for query + sleep duration |
+| `GET /api/db/risk-score?driver=pgasync` | postgres-async-driver (Netty) | optional, default `0` | Tomcat thread released immediately |
+
+`delayMs` is injected as `pg_sleep(delayMs / 1000.0)` on the PostgreSQL side, ensuring the full latency is observable at the driver level.
 
 ### JMeter test plan
 
