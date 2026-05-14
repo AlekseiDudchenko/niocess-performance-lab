@@ -14,7 +14,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnsupportedOperationException.class)
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     Map<String, String> handleNotImplemented(UnsupportedOperationException ex) {
-        return Map.of("error", ex.getMessage());
+        String message = ex.getMessage();
+        if (message == null) {
+            message = "Not implemented";
+        }
+        return Map.of("error", message);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
