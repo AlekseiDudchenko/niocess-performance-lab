@@ -1,7 +1,15 @@
+FROM node:20-alpine AS test
+
+WORKDIR /app
+COPY package.json ./
+COPY src ./src
+COPY test ./test
+
+RUN node --test
+
 FROM node:20-alpine
 
 WORKDIR /app
-
 COPY package.json ./
 COPY src ./src
 
