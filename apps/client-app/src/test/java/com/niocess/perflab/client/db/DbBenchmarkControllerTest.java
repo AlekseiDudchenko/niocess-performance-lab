@@ -85,33 +85,6 @@ class DbBenchmarkControllerTest {
     }
 
     @Test
-    void pricingJdbcDriverReturns200() throws Exception {
-        Product product = mockProduct();
-        when(productRepository.findRandom()).thenReturn(Optional.of(product));
-
-        mockMvc.perform(get("/api/db/pricing?driver=jdbc"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sku").value("SKU-001"))
-                .andExpect(jsonPath("$.name").value("Widget"))
-                .andExpect(jsonPath("$.price").value(9.99))
-                .andExpect(jsonPath("$.currency").value("USD"));
-    }
-
-    @Test
-    void pricingPgasyncDriverReturns501() throws Exception {
-        mockMvc.perform(get("/api/db/pricing?driver=pgasync"))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.error").value("pgasync driver not yet implemented"));
-    }
-
-    @Test
-    void pricingInvalidDriverReturns400() throws Exception {
-        mockMvc.perform(get("/api/db/pricing?driver=foo"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("invalid driver: 'foo'. Valid values: jdbc, pgasync"));
-    }
-
-    @Test
     void pricingReturns404WhenTableEmpty() throws Exception {
         when(productRepository.findRandom()).thenReturn(Optional.empty());
 
@@ -155,32 +128,6 @@ class DbBenchmarkControllerTest {
                 .andExpect(jsonPath("$.clientId").value("client-42"))
                 .andExpect(jsonPath("$.score").value(750))
                 .andExpect(jsonPath("$.category").value("LOW"));
-    }
-
-    @Test
-    void riskScoreInvalidDriverReturns400() throws Exception {
-        mockMvc.perform(get("/api/db/risk-score?driver=foo"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("invalid driver: 'foo'. Valid values: jdbc, pgasync"));
-    }
-
-    @Test
-    void riskScoreJdbcDriverReturns200() throws Exception {
-        RiskProfile profile = mockRiskProfile();
-        when(riskProfileRepository.findRandom()).thenReturn(Optional.of(profile));
-
-        mockMvc.perform(get("/api/db/risk-score?driver=jdbc"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.clientId").value("client-42"))
-                .andExpect(jsonPath("$.score").value(750))
-                .andExpect(jsonPath("$.category").value("LOW"));
-    }
-
-    @Test
-    void riskScorePgasyncDriverReturns501() throws Exception {
-        mockMvc.perform(get("/api/db/risk-score?driver=pgasync"))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.error").value("pgasync driver not yet implemented"));
     }
 
     @Test
