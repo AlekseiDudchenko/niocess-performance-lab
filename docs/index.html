@@ -88,12 +88,12 @@
         <article class="panel wide" id="tailPanel">
           <div class="panel-header">
             <h3>Tail latency</h3>
-            <p>p95 and p99 are often more important than average latency for real users.</p>
+            <p>p95 and p99 are often more important than average latency for real users. Max latency is available only for runs where it was recorded.</p>
           </div>
           <div class="inline-controls" aria-label="Tail latency series controls">
             <label><input type="checkbox" data-series="p95" checked /> p95</label>
             <label><input type="checkbox" data-series="p99" checked /> p99</label>
-            <label><input type="checkbox" data-series="max" checked /> max</label>
+            <label><input type="checkbox" data-series="max" /> max</label>
           </div>
           <canvas id="tailLatencyChart" aria-label="Tail latency chart" role="img"></canvas>
         </article>
