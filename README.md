@@ -1,6 +1,6 @@
-# Niocess Performance Lab
+# Performance Lab
 
-Benchmark lab for demonstrating how Niocess can reduce duplicate backend calls, protect slow downstream services, and improve latency under repeated expensive requests.
+Benchmark lab for measuring latency and throughput across different backend scenarios.
 
 ## Plan
 
@@ -13,14 +13,11 @@ Benchmark lab for demonstrating how Niocess can reduce duplicate backend calls, 
 - [x] Experiment tooling — `run-baseline-experiment.ps1` runner + `analyze-baseline-experiment.py` analyzer
 - [x] Baseline results saved — response time summaries and boxplot for 200 vs 2000 threads
 
-### Phase 2 — Niocess Integration (next)
-- [ ] Add Niocess Layer to Docker Compose between `client-app` and `external-api-simulator`
-- [ ] Configure deduplication / caching rules in Niocess for pricing, risk-score, analytics endpoints
-- [ ] Run the same JMeter matrix with Niocess in the path
-- [ ] Compare results: latency, error rate, upstream call reduction
+### Phase 2 — pgasync (next)
+- [ ] TBD — see [postgres-async-driver](https://github.com/AlekseiDudchenko/postgres-async-driver)
 
 ### Phase 3 — Analysis & Demo
-- [ ] Side-by-side comparison charts (before vs after Niocess)
+- [ ] Side-by-side comparison charts (before vs after)
 - [ ] Document observed improvements per scenario (high concurrency, slow downstream, repeated identical requests)
 - [ ] Prepare demo script / slide deck
 
@@ -53,11 +50,6 @@ Direct baseline:
 JMeter/k6 -> client-app -> external-api-simulator
 ```
 
-With Niocess layer later:
-
-```text
-JMeter/k6 -> client-app -> Niocess Layer -> external-api-simulator
-```
 
 ## Useful Requests
 
@@ -109,13 +101,13 @@ POSTGRES_PASSWORD=strongpassword
 
 ### Benchmark Flows
 
-External-API mode (original):
+External-API mode:
 
 ```text
 JMeter/k6 -> client-app -> external-api-simulator
 ```
 
-Database mode (new):
+Database mode:
 
 ```text
 JMeter/k6 -> client-app -> PostgreSQL
