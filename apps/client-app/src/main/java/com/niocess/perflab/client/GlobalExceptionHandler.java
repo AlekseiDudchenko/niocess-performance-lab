@@ -1,6 +1,5 @@
 package com.niocess.perflab.client;
 
-import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,7 @@ public class GlobalExceptionHandler {
             String valid = String.join(", ",
                     java.util.Arrays.stream(ex.getRequiredType().getEnumConstants())
                             .map(Object::toString)
+                            .map(String::toLowerCase)
                             .toArray(String[]::new));
             return Map.of("error", "invalid " + ex.getName() + ": '" + ex.getValue() + "'. Valid values: " + valid);
         }
