@@ -1,14 +1,16 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
-COPY pom.xml .
+COPY gradlew .
+COPY gradle ./gradle
+COPY build.gradle.kts settings.gradle.kts ./
 COPY src ./src
-RUN mvn -q -DskipTests package
+RUN ./gradlew -q -x test bootJar
 
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
-COPY --from=build /app/target/client-app-0.1.0.jar app.jar
+COPY --from=build /app/build/libs/client-app-0.1.0.jar app.jar
 
 ENV SERVER_PORT=8080
 EXPOSE 8080
