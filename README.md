@@ -2,6 +2,8 @@
 
 A benchmark lab for measuring latency and throughput across different backend strategies. The goal is to run controlled experiments, compare results, and document what actually changes under load.
 
+The dashboard data is loaded from `data/benchmark-results.json` so benchmark runs can update the page later.
+
 ## Architecture
 
 ```
