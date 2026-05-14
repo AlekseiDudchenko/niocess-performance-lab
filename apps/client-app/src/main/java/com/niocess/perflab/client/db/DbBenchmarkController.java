@@ -33,30 +33,34 @@ public class DbBenchmarkController {
 
     @GetMapping("/pricing")
     public CompletableFuture<ResponseEntity<Product>> pricing(
-            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.debug("db/pricing driver={}", driver);
+            @RequestParam(defaultValue = "jdbc") DbDriver driver,
+            @RequestParam(defaultValue = "0") int delayMs) {
+        double delaySec = delayMs / 1000.0;
+        log.debug("db/pricing driver={} delayMs={}", driver, delayMs);
         if (driver == DbDriver.PGASYNC) {
-            return pgAsyncProductRepository.findRandom()
+            return pgAsyncProductRepository.findRandom(delaySec)
                     .thenApply(opt -> opt.<ResponseEntity<Product>>map(ResponseEntity::ok)
                             .orElse(ResponseEntity.notFound().build()));
         }
         return CompletableFuture.completedFuture(
-                productRepository.findRandom()
+                productRepository.findRandom(delaySec)
                         .<ResponseEntity<Product>>map(ResponseEntity::ok)
                         .orElse(ResponseEntity.notFound().build()));
     }
 
     @GetMapping("/risk-score")
     public CompletableFuture<ResponseEntity<RiskProfile>> riskScore(
-            @RequestParam(defaultValue = "jdbc") DbDriver driver) {
-        log.debug("db/risk-score driver={}", driver);
+            @RequestParam(defaultValue = "jdbc") DbDriver driver,
+            @RequestParam(defaultValue = "0") int delayMs) {
+        double delaySec = delayMs / 1000.0;
+        log.debug("db/risk-score driver={} delayMs={}", driver, delayMs);
         if (driver == DbDriver.PGASYNC) {
-            return pgAsyncRiskProfileRepository.findRandom()
+            return pgAsyncRiskProfileRepository.findRandom(delaySec)
                     .thenApply(opt -> opt.<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
                             .orElse(ResponseEntity.notFound().build()));
         }
         return CompletableFuture.completedFuture(
-                riskProfileRepository.findRandom()
+                riskProfileRepository.findRandom(delaySec)
                         .<ResponseEntity<RiskProfile>>map(ResponseEntity::ok)
                         .orElse(ResponseEntity.notFound().build()));
     }

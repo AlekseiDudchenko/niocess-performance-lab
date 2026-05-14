@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface RiskProfileRepository extends JpaRepository<RiskProfile, Long> {
 
-    @Query(value = "SELECT * FROM risk_profiles ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-    Optional<RiskProfile> findRandom();
+    @Query(value = "SELECT pg_sleep(:delaySec), r.* FROM risk_profiles r WHERE r.id = (SELECT id FROM risk_profiles ORDER BY RANDOM() LIMIT 1)", nativeQuery = true)
+    Optional<RiskProfile> findRandom(double delaySec);
 }

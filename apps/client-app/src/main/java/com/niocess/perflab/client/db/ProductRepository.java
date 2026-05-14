@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query(value = "SELECT * FROM products ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-    Optional<Product> findRandom();
+    @Query(value = "SELECT pg_sleep(:delaySec), p.* FROM products p WHERE p.id = (SELECT id FROM products ORDER BY RANDOM() LIMIT 1)", nativeQuery = true)
+    Optional<Product> findRandom(double delaySec);
 }

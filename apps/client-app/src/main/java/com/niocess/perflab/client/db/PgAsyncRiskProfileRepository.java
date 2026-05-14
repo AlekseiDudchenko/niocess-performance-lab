@@ -16,9 +16,10 @@ public class PgAsyncRiskProfileRepository {
         this.pool = pool;
     }
 
-    public CompletableFuture<Optional<RiskProfile>> findRandom() {
+    public CompletableFuture<Optional<RiskProfile>> findRandom(double delaySec) {
         return pool.completeQuery(
-                "SELECT id, client_id, score, category FROM risk_profiles ORDER BY random() LIMIT 1"
+                "SELECT pg_sleep($1), id, client_id, score, category FROM risk_profiles WHERE id = (SELECT id FROM risk_profiles ORDER BY random() LIMIT 1)",
+                delaySec
         ).thenApply(rs -> {
             var it = rs.iterator();
             if (!it.hasNext()) return Optional.<RiskProfile>empty();

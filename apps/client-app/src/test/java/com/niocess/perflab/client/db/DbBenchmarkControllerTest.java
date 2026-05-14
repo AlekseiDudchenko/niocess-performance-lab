@@ -1,5 +1,7 @@
 package com.niocess.perflab.client.db;
 
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
@@ -45,7 +47,7 @@ class DbBenchmarkControllerTest {
     @Test
     void pricingDefaultDriverReturns200() throws Exception {
         Product product = mockProduct();
-        when(productRepository.findRandom()).thenReturn(Optional.of(product));
+        when(productRepository.findRandom(anyDouble())).thenReturn(Optional.of(product));
 
         MvcResult result = mockMvc.perform(get("/api/db/pricing"))
                 .andExpect(request().asyncStarted())
@@ -62,7 +64,7 @@ class DbBenchmarkControllerTest {
     @Test
     void pricingJdbcDriverReturns200() throws Exception {
         Product product = mockProduct();
-        when(productRepository.findRandom()).thenReturn(Optional.of(product));
+        when(productRepository.findRandom(anyDouble())).thenReturn(Optional.of(product));
 
         MvcResult result = mockMvc.perform(get("/api/db/pricing?driver=jdbc"))
                 .andExpect(request().asyncStarted())
@@ -79,7 +81,7 @@ class DbBenchmarkControllerTest {
     @Test
     void pricingPgasyncDriverReturns200() throws Exception {
         Product product = mockProduct();
-        when(pgAsyncProductRepository.findRandom())
+        when(pgAsyncProductRepository.findRandom(anyDouble()))
                 .thenReturn(CompletableFuture.completedFuture(Optional.of(product)));
 
         MvcResult result = mockMvc.perform(get("/api/db/pricing?driver=pgasync"))
@@ -95,6 +97,35 @@ class DbBenchmarkControllerTest {
     }
 
     @Test
+    void pricingJdbcDelayMs100PassesCorrectDelay() throws Exception {
+        Product product = mockProduct();
+        when(productRepository.findRandom(eq(0.1))).thenReturn(Optional.of(product));
+
+        MvcResult result = mockMvc.perform(get("/api/db/pricing?driver=jdbc&delayMs=100"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(result))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sku").value("SKU-001"));
+    }
+
+    @Test
+    void pricingPgasyncDelayMs100PassesCorrectDelay() throws Exception {
+        Product product = mockProduct();
+        when(pgAsyncProductRepository.findRandom(eq(0.1)))
+                .thenReturn(CompletableFuture.completedFuture(Optional.of(product)));
+
+        MvcResult result = mockMvc.perform(get("/api/db/pricing?driver=pgasync&delayMs=100"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(result))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sku").value("SKU-001"));
+    }
+
+    @Test
     void pricingInvalidDriverReturns400() throws Exception {
         mockMvc.perform(get("/api/db/pricing?driver=foo"))
                 .andExpect(status().isBadRequest())
@@ -103,7 +134,7 @@ class DbBenchmarkControllerTest {
 
     @Test
     void pricingReturns404WhenTableEmpty() throws Exception {
-        when(productRepository.findRandom()).thenReturn(Optional.empty());
+        when(productRepository.findRandom(anyDouble())).thenReturn(Optional.empty());
 
         MvcResult result = mockMvc.perform(get("/api/db/pricing"))
                 .andExpect(request().asyncStarted())
@@ -118,7 +149,7 @@ class DbBenchmarkControllerTest {
     @Test
     void riskScoreDefaultDriverReturns200() throws Exception {
         RiskProfile profile = mockRiskProfile();
-        when(riskProfileRepository.findRandom()).thenReturn(Optional.of(profile));
+        when(riskProfileRepository.findRandom(anyDouble())).thenReturn(Optional.of(profile));
 
         MvcResult result = mockMvc.perform(get("/api/db/risk-score"))
                 .andExpect(request().asyncStarted())
@@ -134,7 +165,7 @@ class DbBenchmarkControllerTest {
     @Test
     void riskScoreJdbcDriverReturns200() throws Exception {
         RiskProfile profile = mockRiskProfile();
-        when(riskProfileRepository.findRandom()).thenReturn(Optional.of(profile));
+        when(riskProfileRepository.findRandom(anyDouble())).thenReturn(Optional.of(profile));
 
         MvcResult result = mockMvc.perform(get("/api/db/risk-score?driver=jdbc"))
                 .andExpect(request().asyncStarted())
@@ -150,7 +181,7 @@ class DbBenchmarkControllerTest {
     @Test
     void riskScorePgasyncDriverReturns200() throws Exception {
         RiskProfile profile = mockRiskProfile();
-        when(pgAsyncRiskProfileRepository.findRandom())
+        when(pgAsyncRiskProfileRepository.findRandom(anyDouble()))
                 .thenReturn(CompletableFuture.completedFuture(Optional.of(profile)));
 
         MvcResult result = mockMvc.perform(get("/api/db/risk-score?driver=pgasync"))
@@ -165,6 +196,35 @@ class DbBenchmarkControllerTest {
     }
 
     @Test
+    void riskScoreJdbcDelayMs100PassesCorrectDelay() throws Exception {
+        RiskProfile profile = mockRiskProfile();
+        when(riskProfileRepository.findRandom(eq(0.1))).thenReturn(Optional.of(profile));
+
+        MvcResult result = mockMvc.perform(get("/api/db/risk-score?driver=jdbc&delayMs=100"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(result))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.clientId").value("client-42"));
+    }
+
+    @Test
+    void riskScorePgasyncDelayMs100PassesCorrectDelay() throws Exception {
+        RiskProfile profile = mockRiskProfile();
+        when(pgAsyncRiskProfileRepository.findRandom(eq(0.1)))
+                .thenReturn(CompletableFuture.completedFuture(Optional.of(profile)));
+
+        MvcResult result = mockMvc.perform(get("/api/db/risk-score?driver=pgasync&delayMs=100"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(result))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.clientId").value("client-42"));
+    }
+
+    @Test
     void riskScoreInvalidDriverReturns400() throws Exception {
         mockMvc.perform(get("/api/db/risk-score?driver=foo"))
                 .andExpect(status().isBadRequest())
@@ -173,7 +233,7 @@ class DbBenchmarkControllerTest {
 
     @Test
     void riskScoreReturns404WhenTableEmpty() throws Exception {
-        when(riskProfileRepository.findRandom()).thenReturn(Optional.empty());
+        when(riskProfileRepository.findRandom(anyDouble())).thenReturn(Optional.empty());
 
         MvcResult result = mockMvc.perform(get("/api/db/risk-score"))
                 .andExpect(request().asyncStarted())
